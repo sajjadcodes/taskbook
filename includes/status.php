@@ -10,3 +10,23 @@
  */
 
 
+add_action( 'rest_api_init', 'taskbook_register_task_status' );
+ 
+function taskbook_register_task_status() {
+ 
+    // register_rest_field ( 'name-of-post-type', 'name-of-field-to-return', array-of-callbacks-and-schema() )
+    register_rest_field( 'task',
+     'task_status', array(
+           'get_callback'    => 'taskbook_get_task_status',
+           'schema'          => null,
+        )
+    );
+}
+ 
+function taskbook_get_task_status( $object, $field_name, $request ) {
+    //get the id of the post object array
+    $post_id = $object['id'];
+ 
+    //return the post meta
+    return get_post_meta( $object['id'], $field_name, true );
+}
