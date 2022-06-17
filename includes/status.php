@@ -10,6 +10,20 @@
  */
 
 
+add_action('rest_after_insert_task', 'taskbook_change_status', 10, 2);
+
+function taskbook_change_status( $post , $request ) {
+    $outcome = get_post_meta( $post->ID, 'taskbook_outcome', true);
+
+    if( 0 === strlen($outcome)) {
+        update_post_meta( $post->ID, 'task_status', 'In Progress');
+    }
+    else{
+        update_post_meta( $post->ID, 'task_status', 'Complete');
+    }
+
+}
+
 add_action( 'rest_api_init', 'taskbook_register_task_status' );
  
 function taskbook_register_task_status() {
